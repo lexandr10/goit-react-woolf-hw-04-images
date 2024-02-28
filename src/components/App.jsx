@@ -16,35 +16,37 @@ const App = () => {
   const [largeImageURL, setLargeImageURL] = useState('');
   const [totalPages, setTotalPages] = useState(0);
   useEffect(() => {
+    const getImages = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const { data } = await serviceApi(page, search);
+        if (data.hits.length === 0) {
+          return alert(
+            'Sorry, but no images were found for your request. Please try modifying your search and try again.'
+          );
+        }
+        const total = Math.floor(data.total / 12);
+        setImages(prev => [...prev, ...data.hits]);
+        setTotalPages(total);
+      } catch (er) {
+        setError(er.responce.data.message);
+
+        alert(`${error}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (!search) return;
     getImages();
-  }, [search, page]);
+  }, [search, page, setImages, error]);
   const onSubmit = data => {
     setSearch(data);
     setImages([]);
     setPage(1);
     setTotalPages(0);
   };
-  const getImages = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const { data } = await serviceApi(page, search);
-      if (data.hits.length === 0) {
-        return alert(
-          'Sorry, but no images were found for your request. Please try modifying your search and try again.'
-        );
-      }
-      const total = Math.floor(data.total / 12);
-      setImages(prev => [...prev, ...data.hits]);
-      setTotalPages(total);
-    } catch (er) {
-      setError(er.responce.data.message);
 
-      alert(`${error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
   const toogleModal = largeImg => {
     setIsHidden(prev => !prev);
     setLargeImageURL(largeImg);

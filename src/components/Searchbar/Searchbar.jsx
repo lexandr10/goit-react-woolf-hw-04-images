@@ -1,47 +1,41 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import stl from './Searchbar.module.css';
-export class Searchbar extends Component {
-  state = {
-    search: '',
+export const Searchbar = props => {
+  const [search, setSearch] = useState('');
+  const handlerChange = evt => {
+    const { value } = evt.target;
+    setSearch(value);
   };
-  handlerChange = evt => {
-    const { value, name } = evt.target;
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = e => {
+  const handlerSubmit = e => {
     e.preventDefault();
-
-    if (this.state.search.trim() === '') {
+    if (search.trim() === '') {
       alert(
         'Sorry',
         'Sorry, but I dont know what to search for. Please enter your query in the search field, and Ill see what I can find.',
         'Ok'
       );
     } else {
-      this.props.onSubmit(this.state.search);
+      props.onSubmit(search);
     }
   };
-  render() {
-    return (
-      <header className={stl.searchbar}>
-        <form onSubmit={this.handleSubmit} className={stl.SearchForm}>
-          <button type="submit" className={stl.SearchFormButton}>
-            <span className={stl.SearchFormButtonLabel}>Search</span>
-          </button>
+  return (
+    <header className={stl.searchbar}>
+      <form onSubmit={handlerSubmit} className={stl.SearchForm}>
+        <button type="submit" className={stl.SearchFormButton}>
+          <span className={stl.SearchFormButtonLabel}>Search</span>
+        </button>
 
-          <input
-            className={stl.SearchFormInput}
-            type="text"
-            name="search"
-            value={this.props.search}
-            autocomplete="off"
-            onChange={this.handlerChange}
-            autofocus
-            placeholder="Search images and photos"
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          className={stl.SearchFormInput}
+          type="text"
+          name="search"
+          value={search}
+          autocomplete="off"
+          onChange={handlerChange}
+          autofocus
+          placeholder="Search images and photos"
+        />
+      </form>
+    </header>
+  );
+};
