@@ -1,6 +1,6 @@
-import { Component, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
-import { serviceApi, serviceApiSearch } from './serviceApi/serviceApi';
+import { serviceApi } from './serviceApi/serviceApi';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import stl from './App.module.css';
@@ -30,16 +30,14 @@ const App = () => {
         setImages(prev => [...prev, ...data.hits]);
         setTotalPages(total);
       } catch (er) {
-        setError(er.responce.data.message);
-
-        alert(`${error}`);
+        alert(`${er.responce.data.message}`);
       } finally {
         setLoading(false);
       }
     };
     if (!search) return;
     getImages();
-  }, [search, page, setImages, error]);
+  }, [search, page]);
   const onSubmit = data => {
     setSearch(data);
     setImages([]);

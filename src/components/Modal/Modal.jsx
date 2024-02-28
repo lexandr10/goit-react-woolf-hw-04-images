@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import stl from './Modal.module.css';
-export const Modal = props => {
+export const Modal = ({ toogleModal, largeImageURL }) => {
   useEffect(() => {
     const handlerKeyDown = evt => {
       if (evt.code === 'Escape') {
-        props.toogleModal();
+        toogleModal();
       }
     };
     document.addEventListener('keydown', handlerKeyDown);
@@ -12,16 +12,16 @@ export const Modal = props => {
     return () => {
       document.removeEventListener('keydown', handlerKeyDown);
     };
-  }, [props]);
+  }, [toogleModal]);
   const handleBackdropClick = e => {
     if (e.currentTarget === e.target) {
-      props.toogleModal();
+      toogleModal();
     }
   };
   return (
     <div onClick={handleBackdropClick} className={stl.Overlay}>
       <div className={stl.Modal}>
-        <img src={props.largeImageURL} alt="" />
+        <img src={largeImageURL} alt="" />
       </div>
     </div>
   );
